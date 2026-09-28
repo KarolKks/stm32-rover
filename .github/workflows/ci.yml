@@ -1,0 +1,47 @@
+name: Rover CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    name: Build Firmware (ARM GCC)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install ARM GNU Toolchain
+        uses: xpack-dev-tools/setup-arm-none-eabi-action@v2
+        with:
+          version: 13.3.1-1.1
+
+      - name: Install Ninja
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build
+
+      - name: Configure CMake
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build Firmware
+        run: cmake --build build
+
+      - name: Print Memory Usage
+        run: |
+          echo "=== Firmware Size ==="
+          arm-none-eabi-size build/radio-rover-controller.elf
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: radio-rover-firmware
+          path: |
+            build/radio-rover-controller.elf
+            build/radio-rover-controller.hex
+            build/radio-rover-controller.bin
+          if-no-files-found: error
