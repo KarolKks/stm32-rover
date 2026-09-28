@@ -14,7 +14,6 @@ out/
 *.obj
 *.d
 *.i
-*.s
 
 # Libraries & Archives
 *.a

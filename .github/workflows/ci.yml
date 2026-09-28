@@ -18,7 +18,7 @@ jobs:
       - name: Install ARM GNU Toolchain
         uses: carlosperate/arm-none-eabi-gcc-action@v1
         with:
-          release: '13.3.Rel1'
+          release: 'latest'
 
       - name: Install Ninja
         run: |
@@ -26,10 +26,10 @@ jobs:
           sudo apt-get install -y ninja-build
 
       - name: Configure CMake
-        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+        run: cmake -B build -G Ninja -DCMAKE_TOOLCHAIN_FILE=Cmake/arm-none-eabi-gcc.cmake -DCMAKE_BUILD_TYPE=Release
 
       - name: Build Firmware
-        run: cmake --build build
+        run: cmake --build build --verbose
 
       - name: Print Memory Usage
         run: |
