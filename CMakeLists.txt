@@ -58,18 +58,28 @@ add_compile_definitions(
 
 # Project Include Directories
 set(PROJECT_INCLUDES
+    "${CMAKE_CURRENT_SOURCE_DIR}/Config"
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Tasks/Inc"
     "${CMAKE_CURRENT_SOURCE_DIR}/Bsp/Inc"
     "${CMAKE_CURRENT_SOURCE_DIR}/Components/NRF24L01"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Components/L298N"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Middlewares/FreeRTOS/Source/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F"
     "${CMAKE_CURRENT_SOURCE_DIR}/Drivers/CMSIS/Device/ST/STM32G4xx/Include"
     "${CMAKE_CURRENT_SOURCE_DIR}/Drivers/CMSIS/Include"
     "${CMAKE_CURRENT_SOURCE_DIR}/Drivers/STM32G4xx_LL_Driver/Inc"
 )
 
-# Application Sources (Core, BSP, Components)
+# Application Sources (Core, Tasks, BSP, Components)
 file(GLOB_RECURSE CORE_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Src/*.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/Core/Src/*.cpp"
+)
+
+file(GLOB_RECURSE TASKS_SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/Tasks/Src/*.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Tasks/Src/*.cpp"
 )
 
 file(GLOB_RECURSE BSP_SOURCES
@@ -82,10 +92,24 @@ file(GLOB_RECURSE COMPONENT_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Components/*.cpp"
 )
 
+# FreeRTOS Kernel Sources
+set(FREERTOS_SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/Middlewares/FreeRTOS/Source/tasks.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Middlewares/FreeRTOS/Source/queue.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Middlewares/FreeRTOS/Source/list.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Middlewares/FreeRTOS/Source/timers.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Middlewares/FreeRTOS/Source/event_groups.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Middlewares/FreeRTOS/Source/stream_buffer.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Middlewares/FreeRTOS/Source/portable/MemMang/heap_4.c"
+)
+
 set(APP_SOURCES
     ${CORE_SOURCES}
+    ${TASKS_SOURCES}
     ${BSP_SOURCES}
     ${COMPONENT_SOURCES}
+    ${FREERTOS_SOURCES}
 )
 
 # Startup file
